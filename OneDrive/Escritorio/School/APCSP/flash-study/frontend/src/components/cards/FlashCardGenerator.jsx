@@ -1,0 +1,84 @@
+import {useState} from 'react'
+import { v4 as uuidv4 } from 'uuid';
+import { useContext } from 'react'
+import axios from 'axios'
+import Spinner from '../layout/Spinner'
+import CardContext from '../../context/CardsContext'
+
+function FlashCardGenerator() {
+  const {setSuggestionsData} = useContext(CardContext)
+
+  const [subject, setSubject] = useState('')
+  const [loading, setLoading] = useState(false)
+
+  const onSubmit = async (e) => {
+    if(subject === ''){
+      alert('Please type in a subject')
+    } else {
+      getList(`Generate a numbered list of 10 ${subject} to study`)
+      setSubject('')
+    }
+
+
+    e.preventDefault();
+  }
+
+  const getList = async (prompt) => {
+    setLoading(true)
+    axios.post('http://localhost:5000/openai/v1/completions', {
+      prompt
+    })
+    .then(function (response) {
+      //turn response to array
+      let res = response.data.data[0].text.split('\n')
+    
+      const removeEmptyStrings = (string) => {
+        return string !== ''
+      }
+
+      res = res.filter(removeEmptyStrings)
+
+      res = res.map((item) => (
+        {
+          text: item,
+          id: uuidv4()
+        }
+      ))
+
+      setSuggestionsData(res);
+      setLoading(false)
+    })
+    .catch(function (error) {
+      console.log(error);
+      setLoading(false)
+    });
+
+  }
+
+  const onMutate = (e) => {
+    setSubject(e.target.value)
+  }
+
+  if(loading) {
+    return <Spinner />
+  }
+
+  return (
+    <form className="card bg-primary p-8 text-white" onSubmit={onSubmit}>
+      <p className='card-title mb-5'> Generate Flash Card Suggestions</p>
+      <div className='form-control mb-8'>
+        <p className="label">Enter Subject</p>
+        <input 
+          type="text" 
+          id='subject'
+          value={subject} 
+          onChange={onMutate}
+          className='input input-primary' 
+        />
+      </div>
+      <button type='submit' className="btn">Submit</button>
+    </form>
+  )
+}
+
+export default FlashCardGenerator
