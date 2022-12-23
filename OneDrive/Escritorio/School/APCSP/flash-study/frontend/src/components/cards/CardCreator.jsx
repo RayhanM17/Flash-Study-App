@@ -23,7 +23,7 @@ function CardCreator() {
       setBtnDisabled(false);
     }
 
-    if(e.target.id = 'front'){
+    if(e.target.id === 'front'){
       setFront(e.target.value);
     } else {
       setBack(e.target.value);

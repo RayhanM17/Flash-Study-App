@@ -4,10 +4,6 @@ import { v4 as uuidv4 } from 'uuid';
 const CardsContext = createContext()
 
 export const CardProvider = ({children}) => {
-  const [suggestionsData, setSuggestionsData] = useState([{
-    id: 1,
-    text: 'No suggestions generated'
-  }])
 
   const [cards, setCards] = useState([{
     id: 1,
@@ -20,10 +16,15 @@ export const CardProvider = ({children}) => {
     edit: false
   })
 
-  // Add feedback
+  // Add card
   const addCard = (newCard) => {
     newCard.id = uuidv4();
     setCards([newCard, ...cards]);
+  }
+
+  // Add cards
+  const addCards = (newCards) => {
+    setCards([...newCards, ...cards]);
   }
 
   // Delete feedback
@@ -52,11 +53,10 @@ export const CardProvider = ({children}) => {
   return (
     <CardsContext.Provider 
       value={{
-        suggestionsData,
-        setSuggestionsData,
         cards,
         setCards,
         addCard,
+        addCards,
         cardEdit,
         setCardEdit,
         deleteCard,

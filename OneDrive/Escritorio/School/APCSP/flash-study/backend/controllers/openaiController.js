@@ -12,7 +12,7 @@ const generateCards = async(req, res) => {
     const response = await openai.createCompletion({
       model: "text-davinci-002",
       prompt,
-      n: 1,
+      n: 10,
       max_tokens: 500
     });
 

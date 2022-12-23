@@ -1,5 +1,4 @@
 import {Link} from 'react-router-dom'
-import CardFlipper from '../components/cards/CardFlipper'
 
 
 function Home() {
@@ -12,7 +11,6 @@ function Home() {
       <Link to='/flashcreator' className='text-lg font-bold btn btn-primary'>
             Get Started
       </Link>
-      <CardFlipper />
 
     </div>
   )

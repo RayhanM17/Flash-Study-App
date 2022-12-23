@@ -6,7 +6,7 @@ import Spinner from '../layout/Spinner'
 import CardContext from '../../context/CardsContext'
 
 function FlashCardGenerator() {
-  const {setSuggestionsData} = useContext(CardContext)
+  const {addCards} = useContext(CardContext)
 
   const [subject, setSubject] = useState('')
   const [loading, setLoading] = useState(false)
@@ -15,7 +15,7 @@ function FlashCardGenerator() {
     if(subject === ''){
       alert('Please type in a subject')
     } else {
-      getList(`Generate a numbered list of 10 ${subject} to study`)
+      getList(`Create a list of 10 terms and defenitions seperated by a colon on the subject of ${subject}`)
       setSubject('')
     }
 
@@ -30,22 +30,37 @@ function FlashCardGenerator() {
     })
     .then(function (response) {
       //turn response to array
-      let res = response.data.data[0].text.split('\n')
+      let data = response.data.data[0].text
+      let res = []
+
+      let termRe = /(\n){1,2}([^:]*)/g;
+      let defRe = /:([^\n]*)\n/g
+
+      let front = data.match(termRe)
+      let back = data.match(defRe)
     
-      const removeEmptyStrings = (string) => {
-        return string !== ''
-      }
-
-      res = res.filter(removeEmptyStrings)
-
-      res = res.map((item) => (
-        {
-          text: item,
-          id: uuidv4()
-        }
+      // Clean data
+      back = back.map((item) => (
+        item.replace(/[:]|[.]|[\n]/g, "")
+      ))
+      front = front.map((item) => (
+        item.replace(/[\n]|[\d]|[.]|[)]/g, "")
       ))
 
-      setSuggestionsData(res);
+      for(let i = 0; i < front.length; i++) {
+        if(
+          typeof front[i] == "string" &&
+          typeof back[i] == "string"
+          ){
+          res.push({
+            front: front[i],
+            back: back[i],
+            id: uuidv4()
+          })
+        }
+      }
+
+      addCards(res)
       setLoading(false)
     })
     .catch(function (error) {

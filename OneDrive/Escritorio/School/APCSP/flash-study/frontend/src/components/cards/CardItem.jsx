@@ -7,7 +7,7 @@ function CardItem({item}) {
   const {deleteCard, editCards} = useContext(CardsContext)
 
   return (
-    <li className='card p-5 card-bordered border-r-2 border-secondary text-white'>
+    <li className='card mt-2 p-5 card-bordered border-r-2 border-secondary text-white'>
       <p>{item.front}</p>
       <p className='mt-4'>{item.back}</p>
       <div className='mt-4'>
