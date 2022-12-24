@@ -6,6 +6,7 @@ import Flash from './pages/Flash';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import { CardProvider } from './context/CardsContext';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (

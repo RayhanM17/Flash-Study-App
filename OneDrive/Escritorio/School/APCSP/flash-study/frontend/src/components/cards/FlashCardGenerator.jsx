@@ -1,5 +1,6 @@
 import {useState} from 'react'
 import { v4 as uuidv4 } from 'uuid';
+import { toast } from 'react-toastify';
 import { useContext } from 'react'
 import axios from 'axios'
 import Spinner from '../layout/Spinner'
@@ -40,10 +41,18 @@ function FlashCardGenerator() {
 
       addCards(data)
       setLoading(false)
+      toast('Cards Generated', {
+        position: toast.POSITION.BOTTOM_LEFT,
+        theme: "dark"
+      });
     })
     .catch(function (error) {
       console.log(error);
       setLoading(false)
+      toast.error('Failed to Generate', {
+        position: toast.POSITION.BOTTOM_LEFT,
+        theme: "dark"
+      });
     });
   }
 

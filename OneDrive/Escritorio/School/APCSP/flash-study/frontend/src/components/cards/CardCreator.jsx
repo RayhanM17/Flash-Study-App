@@ -1,5 +1,6 @@
 import { useContext, useState, useEffect} from "react"
 import CardContext from '../../context/CardsContext'
+import { toast } from 'react-toastify';
 
 function CardCreator() {
   const [front, setFront] = useState('');
@@ -40,19 +41,30 @@ function CardCreator() {
 
       if(cardEdit.edit === true) {
         updateCards(cardEdit.item.id, newCard)
+        toast('Card Updated', {
+          position: toast.POSITION.BOTTOM_LEFT,
+          theme: "dark"
+        });
       } else{
         addCard(newCard);
+        toast('Card Added', {
+          position: toast.POSITION.BOTTOM_LEFT,
+          theme: "dark"
+        });
       }
 
       setFront('');
       setBack('');
+    } else {
+      toast.error('Please fill all fields', {
+        position: toast.POSITION.BOTTOM_LEFT,
+        theme: "dark"
+      });
     }
   }
 
   return (
-    <form onSubmit={handleSubmit} className="card bg-primary p-8 mt-7 text-white" 
-    // onSubmit={}
-    >
+    <form onSubmit={handleSubmit} className="card bg-primary p-8 mt-7 text-white">
       <p className='card-title mb-5'> Create Flash Cards</p>
       <div className='form-control mb-8'>
         <p className="label">Enter Front</p>
