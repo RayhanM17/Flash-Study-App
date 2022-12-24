@@ -16,12 +16,43 @@ const generateCards = async(req, res) => {
       max_tokens: 500
     });
 
-    const list = response.data.choices
+    const text = response.data.choices[0].text
 
-    res.status(200).json({
-      success: true,
-      data: list
-    })
+    let list = []
+
+    let termRe = /(\n){1,2}([^:]*)/g;
+    let defRe = /:([^\n]*)\n/g
+
+    let front = text.match(termRe)
+    let back = text.match(defRe)
+  
+    // Clean list
+    if(back !== null && front !== null) {
+      back = back.map((item) => (
+        item.replace(/[:]|[.]|[\n]/g, "")
+      ))
+      front = front.map((item) => (
+        item.replace(/[\n]|[\d]|[.]|[)]/g, "")
+      ))
+
+      for(let i = 0; i < front.length; i++) {
+        if(
+          typeof front[i] == "string" &&
+          typeof back[i] == "string"
+          ){
+          list.push({
+            front: front[i],
+            back: back[i]
+          })
+        }
+      }
+
+      res.status(200).json({
+        success: true,
+        data: list
+      })
+    }
+
   } catch(error) {
     if(error.response) {
       console.log(error.response.status);

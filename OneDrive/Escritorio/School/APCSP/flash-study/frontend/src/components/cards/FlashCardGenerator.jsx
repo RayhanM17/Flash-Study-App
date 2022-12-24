@@ -29,45 +29,22 @@ function FlashCardGenerator() {
       prompt
     })
     .then(function (response) {
-      //turn response to array
-      let data = response.data.data[0].text
-      let res = []
+      //add id
+      let data = response.data.data
 
-      let termRe = /(\n){1,2}([^:]*)/g;
-      let defRe = /:([^\n]*)\n/g
+      data = data.map((item) => ({
+        front: item.front,
+        back: item.back,
+        id: uuidv4()
+      }))
 
-      let front = data.match(termRe)
-      let back = data.match(defRe)
-    
-      // Clean data
-      back = back.map((item) => (
-        item.replace(/[:]|[.]|[\n]/g, "")
-      ))
-      front = front.map((item) => (
-        item.replace(/[\n]|[\d]|[.]|[)]/g, "")
-      ))
-
-      for(let i = 0; i < front.length; i++) {
-        if(
-          typeof front[i] == "string" &&
-          typeof back[i] == "string"
-          ){
-          res.push({
-            front: front[i],
-            back: back[i],
-            id: uuidv4()
-          })
-        }
-      }
-
-      addCards(res)
+      addCards(data)
       setLoading(false)
     })
     .catch(function (error) {
       console.log(error);
       setLoading(false)
     });
-
   }
 
   const onMutate = (e) => {
