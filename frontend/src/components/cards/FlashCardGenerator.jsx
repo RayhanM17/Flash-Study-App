@@ -5,6 +5,8 @@ import { useContext } from 'react'
 import axios from 'axios'
 import Spinner from '../layout/Spinner'
 import CardContext from '../../context/CardsContext'
+const port = process.env.PORT || 5000;
+const baseURL = process.env.BASE_URL || "http://localhost:3000"
 
 function FlashCardGenerator() {
   const {addCards} = useContext(CardContext)
@@ -26,7 +28,7 @@ function FlashCardGenerator() {
 
   const getList = async (prompt) => {
     setLoading(true)
-    axios.post('https://flashstudy.onrender.com:10000/openai/v1/completions', {
+    axios.post(`${baseURL}:${port}/openai/v1/completions`, {
       prompt
     })
     .then(function (response) {
