@@ -26,7 +26,7 @@ function FlashCardGenerator() {
 
   const getList = async (prompt) => {
     setLoading(true)
-    axios.post('http://localhost:5000/openai/v1/completions', {
+    axios.post('https://flashstudy.onrender.com:10000/openai/v1/completions', {
       prompt
     })
     .then(function (response) {
