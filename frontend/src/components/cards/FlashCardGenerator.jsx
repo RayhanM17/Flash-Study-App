@@ -6,7 +6,7 @@ import axios from 'axios'
 import Spinner from '../layout/Spinner'
 import CardContext from '../../context/CardsContext'
 const port = process.env.PORT || 5000;
-const baseURL = process.env.BASE_URL || "http://localhost:3000"
+const baseURL = process.env.BASE_URL || "http://localhost"
 
 function FlashCardGenerator() {
   const {addCards} = useContext(CardContext)
