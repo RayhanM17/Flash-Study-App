@@ -21,11 +21,6 @@ app.use('/openai', require('./routes/openaiRoutes'))
 
 // Serve Frontend
 if(process.env.NODE_ENV == 'production') {
-  const compression = require('compression')
-
-  // Enable compression for all routes
-  app.use(compression());
-
   // Set build folder as static
   app.use(express.static(path.join(__dirname, '../frontend/build')))
 
